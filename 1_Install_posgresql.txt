@@ -1,0 +1,47 @@
+установка postgresql
+
+Команды использованные в гайде (всё из-под рута):
+
+Генерация локалей:
+locale -a
+locale-gen ru_RU.UTF-8
+dpkg-reconfigure locales
+
+
+
+Инсталляция PostgreSQL Pro
+sh -c 'echo "deb http://1c.postgrespro.ru/deb/ $(lsb_release -cs) main" > /etc/apt/sources.list.d/postgrespro-1c.list'
+
+Установить ключи и обновить список пакетов
+wget --quiet -O - http://1c.postgrespro.ru/keys/GPG-KEY-POSTGRESPRO-1C | apt-key add -
+apt-get update
+
+ставим Postgre
+apt-get install postgresql-pro-1c-9.6
+
+
+
+Правим права доступа для системного пользователя БД:
+chown -R postgres:postgres /etc/postgresql/
+chown -R postgres:postgres /var/lib/postgresql/
+
+Добавляем сервис в автозагрузку и запускаем его:
+systemctl enable postgresql
+systemctl start postgresql
+
+Меняем пароль на рутового пользователя БД:
+sudo -u postgres psql postgres
+\password postgres
+
+(далее дважды вводим пароль)
+
+\quit
+
+
+
+
+
+
+
+
+
