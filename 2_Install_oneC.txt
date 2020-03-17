@@ -1,0 +1,49 @@
+Предварительно установим пакеты, необходимые для работы сервера 1С:Предприятие
+
+apt install imagemagick unixodbc libgsf-bin ttf-mscorefonts-installer t1utils 
+
+В процессе установки пакета ttf-mscorefonts-installer потребуется принять условия пользовательского соглашения EULA.
+
+
+1c-enterprise83-common - общие компоненты
+1c-enterprise83-server - собственно сам сервер, пакет зависим от общих компонент
+1c-enterprise83-ws - веб-расширения сервера, пакет зависим от самого сервера
+
+Список использованных команд:
+
+Начало установки компонентов сервера и их порядок:
+sudo dpkg -i 1c-enterprise83-common_*.deb
+sudo dpkg -i 1c-enterprise83-common-nls_*.deb
+sudo dpkg -i 1c-enterprise83-server_*.deb
+sudo dpkg -i 1c-enterprise83-server-nls_*.deb
+sudo dpkg -i 1c-enterprise83-ws_*.deb
+sudo dpkg -i 1c-enterprise83-ws-nls_*.deb
+sudo dpkg -i 1c-enterprise83-crs_*.deb
+sudo dpkg -i 1c-enterprise83-client_*.deb
+
+Исправляем проблему установки 1c-enterprise83-client:
+sudo apt-get install imagemagick-6.q16:i386 imagemagick:i386
+sudo apt-get -f install
+
+Заканчиваем установку компонентов 1С:
+sudo dpkg -i 1c-enterprise83-client-nls_*.deb
+Устанавливаем дополнительные пакеты для нормальной работы 1С Сервера (шрифты и прочие пакеты)
+
+Если возникла проблема с libWand.so при запуске клиента как в видео, нужно переустановить пакеты imagemagick-6.q16 imagemagick (оба в сборке под i386):
+sudo apt-get install imagemagick-6.q16:i386 imagemagick:i386
+
+Обязательно назначить пользователя папке с файлами сервера 1С:
+chown -R usr1cv8:grp1cv8 /opt/1C
+
+Включаем автозагрузку 1С Сервера и запускаем сам сервер:
+systemctl enable srv1cv83
+systemctl start srv1cv83
+systemctl status srv1cv83
+
+Отключаем IPv6 в Ubuntu 16.04.2 добавляем в файл /etc/sysctl.conf следующие строчки:
+net.ipv6.conf.all.disable_ipv6 = 1
+net.ipv6.conf.default.disable_ipv6 = 1
+net.ipv6.conf.lo.disable_ipv6 = 1
+
+Перезапускаем систему, проверяем чтобы поднялась 1Ска и Постгря.
+reboot -f

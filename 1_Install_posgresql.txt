@@ -27,6 +27,7 @@ chown -R postgres:postgres /var/lib/postgresql/
 
 Добавляем сервис в автозагрузку и запускаем его:
 systemctl enable postgresql
+sudo update-rc.d postgresql enable
 systemctl start postgresql
 
 Меняем пароль на рутового пользователя БД:
